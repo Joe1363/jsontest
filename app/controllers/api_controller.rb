@@ -1,14 +1,13 @@
 class ApiController < ActionController::Base
 
   def service
-    #json = JSON.parse(params.to_s)
-    json = JSON.parse('{"command" : "createUser", "email": "allan@smartass.com", "encrypted_password": "password", "uid": 123}')
+    json = JSON.parse(request.body.read)
     if json["command"] == "createUser"
       createUser(json)
     elsif json["command"] == "updatePlan"
       # TODO
     else
-      render json: "ERROR", status: 400
+      render json: '{"success":"FAILURE", "message":"Missing or No Command"}', status: 400
     end
   end
 

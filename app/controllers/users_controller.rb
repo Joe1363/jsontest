@@ -1,4 +1,4 @@
-class UsersController < ActionController::Base
+class UsersController < ApplicationController
   def index
     @users = User.all
     respond_to do |format|
@@ -6,4 +6,11 @@ class UsersController < ActionController::Base
       format.json { render json: @users, status: :ok }
     end
   end
+
+  def profile
+    @user = current_user
+    render :profile
+  end
+
+
 end

@@ -1,0 +1,10 @@
+<h1> Welcome <%= @user.email %> </h1>
+<h2> You are now logged in to Hours Logger </h2>
+<% if user_signed_in? %>
+  <p><%= link_to "Logout", destroy_user_session_path, method: :delete %></p>
+  <p>signed in</p>
+<% else %>
+  <p><%= link_to "Sign Up", new_user_registration_path %></p>
+  <p><%= link_to "Login", new_user_session_path %></p>
+<% end %>
+<h1> hello </h1>

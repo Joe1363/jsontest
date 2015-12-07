@@ -70,6 +70,36 @@ describe "create user json" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "UID missing"
+    expect(response_from_hl_rails_server["message"]).to eq "No UID. User not created"
+  end
+
+  it "should CRASH & BURN no email" do
+    message_to_hl_rails_server = '{"command" : "createUser", "encrypted_password" : "password", "uid" : 123 }'
+    # send message to hl server
+    page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
+    # Check returned status code from the HL rails server
+    expect(page.status_code).to eq 400
+    # Check that we got json back
+    expect(page.response_headers["Content-Type"].include?('json')).to eq true
+    # parse the contents of the message we got from the server
+    response_from_hl_rails_server = JSON.parse(body)
+    # Check contents of message
+    expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
+    expect(response_from_hl_rails_server["message"]).to eq "User NOT created"
+  end
+
+  it "should CRASH & BURN no password" do
+    message_to_hl_rails_server = '{"command" : "createUser", "email" : "allan@smartass.com", "uid" : 123}'
+    # send message to hl server
+    page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
+    # Check returned status code from the HL rails server
+    expect(page.status_code).to eq 400
+    # Check that we got json back
+    expect(page.response_headers["Content-Type"].include?('json')).to eq true
+    # parse the contents of the message we got from the server
+    response_from_hl_rails_server = JSON.parse(body)
+    # Check contents of message
+    expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
+    expect(response_from_hl_rails_server["message"]).to eq "User NOT created"
   end
 end

@@ -1,4 +1,5 @@
-class ApiController < ActionController::Base
+class ApiController < ApplicationController
+
   def service
     json = JSON.parse(request.body.read)
     if json["command"] == "createUser"
@@ -7,8 +8,8 @@ class ApiController < ActionController::Base
       # TODO
     elsif json["command"] == "changeStatus"
       # TODO
-    elsif json["command"] == "updatePlan"
-      # TODO
+    elsif json["command"] == "loginUser"
+      loginUser(json)
     else
       render json: '{"success":"FAILURE", "message":"Missing or Incorrect Command"}', status: 400
     end
@@ -16,14 +17,18 @@ class ApiController < ActionController::Base
 
   private
   def createUser json
-    newUser = User.new
-    newUser.email = json["email"]
-    newUser.password = json["encrypted_password"]
-    newUser.uid = json["uid"]
-    if newUser.save
-      render json: "{\"success\":\"OK\", \"message\":\"User created\", \"uid\": \"#{newUser.uid}\"}", status: 200
+    if json["uid"]
+      newUser = User.new
+      newUser.email = json["email"]
+      newUser.password = json["encrypted_password"]
+      newUser.uid = json["uid"]
+      if newUser.save
+        render json: "{\"success\":\"OK\", \"message\":\"User created\", \"uid\": \"#{newUser.uid}\"}", status: 200
+      else
+        render json: '{"success":"FAILURE", "message":"User NOT created"}', status: 400
+      end
     else
-      render json: '{"success":"FAILURE", "message":"User NOT created"}', status: 400
+      render json: '{"success":"FAILURE", "message":"No UID. User not created"}', status: 400
     end
   end
 
@@ -35,7 +40,10 @@ class ApiController < ActionController::Base
     #TODO
   end
 
-  def loginUser
+  def loginUser json
+    uid = json["uid"]
+    aUser = User.where("uid=" + uid)
+    sign_in(aUser)
     #TODO
   end
 end

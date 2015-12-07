@@ -5,14 +5,17 @@ class ApiController < ActionController::Base
       createUser(json)
     elsif json["command"] == "updatePlan"
       # TODO
+    elsif json["command"] == "changeStatus"
+      # TODO
+    elsif json["command"] == "updatePlan"
+      # TODO
     else
-      render json: '{"success":"FAILURE", "message":"Missing or No Command"}', status: 400
+      render json: '{"success":"FAILURE", "message":"Missing or Incorrect Command"}', status: 400
     end
   end
 
   private
   def createUser json
-    # TODO:actually create a user in the system/database
     newUser = User.new
     newUser.email = json["email"]
     newUser.password = json["encrypted_password"]

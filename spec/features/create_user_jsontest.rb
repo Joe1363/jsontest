@@ -39,7 +39,7 @@ describe "create user json" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "Missing or No Command"
+    expect(response_from_hl_rails_server["message"]).to eq "Missing or Incorrect Command"
   end
 
   it "should CRASH & BURN wrong command" do
@@ -54,7 +54,7 @@ describe "create user json" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "Missing or No Command"
+    expect(response_from_hl_rails_server["message"]).to eq "Missing or Incorrect Command"
   end
 
   # TODO: finish this test

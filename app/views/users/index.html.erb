@@ -1,5 +1,8 @@
-<% @users.each do |u| %>
-<p>
-  <%= u.email %>
-</p>
+<h1>All Users</h1>
+<% if !@users.blank? %>
+  <% @users.each do |u| %>
+    <p><%= u.email %></p>
+  <% end %>
+<% else %>
+  <p>There are no users, yet...</p>
 <% end %>

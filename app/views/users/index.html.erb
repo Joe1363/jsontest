@@ -1,8 +1,9 @@
 <h1>All Users</h1>
 <% if !@users.blank? %>
   <% @users.each do |u| %>
-    <p><%= u.email %></p>
+  <p><a href="/users/<%= u.id %>"><%= u.email %><a></p>
+
   <% end %>
 <% else %>
-  <p>There are no users, yet...</p>
+  <p>There are no users. You should do something about that...</p>
 <% end %>

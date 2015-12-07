@@ -1,4 +1,7 @@
-<h1> Welcome <%= @user.email %> </h1>
-<h2> You are now logged in to Hours Logger </h2>
-
-<h1> hello </h1>
+<% if @user = current_user %>
+  <h1> Welcome <%= @user.email %> </h1>
+  <p> You are now logged in to Hours Logger </p>
+<% else %>
+  <h1><%= @user.email %>'s page<h1>
+  <p>That's it really</p>
+<% end %>

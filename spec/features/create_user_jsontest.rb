@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe "create user json" do
-
-  # Common HTTP request headers - DRY!
+  # Common HTTP request headers, put in variable for ease of use - DRY!
   request_headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
 
   it "should create a user from an API, returing a uid and success message" do
@@ -43,7 +42,6 @@ describe "create user json" do
     expect(response_from_hl_rails_server["message"]).to eq "Missing or No Command"
   end
 
-
   it "should CRASH & BURN wrong command" do
     message_to_hl_rails_server = '{"command" : "OhNoUDidnt", "email" : "allan@smartass.com", "encrypted_password" : "password"}'
     # send message to hl server
@@ -59,9 +57,9 @@ describe "create user json" do
     expect(response_from_hl_rails_server["message"]).to eq "Missing or No Command"
   end
 
-
+  # TODO: finish this test
   it "should CRASH & BURN no uid" do
-    message_to_hl_rails_server = '{"command" : "createUser", "email" : "allan@smartass.com", "encrypted_password" : "password, "uid" : 123}'
+    message_to_hl_rails_server = '{"command" : "createUser", "email" : "allan@smartass.com", "encrypted_password" : "password"}'
     # send message to hl server
     page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
     # Check returned status code from the HL rails server
@@ -74,5 +72,4 @@ describe "create user json" do
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
     expect(response_from_hl_rails_server["message"]).to eq "UID missing"
   end
-
 end

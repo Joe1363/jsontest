@@ -1,5 +1,4 @@
 class ApiController < ActionController::Base
-
   def service
     json = JSON.parse(request.body.read)
     if json["command"] == "createUser"
@@ -25,5 +24,15 @@ class ApiController < ActionController::Base
     end
   end
 
+  def updatePlan
+    #TODO
+  end
 
+  def changeStatus
+    #TODO
+  end
+
+  def loginUser
+    #TODO
+  end
 end

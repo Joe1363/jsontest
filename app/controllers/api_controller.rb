@@ -47,14 +47,14 @@ class ApiController < ApplicationController
     elsif uid == ""
         render json: '{"success":"FAILURE", "message":"User ID not valid"}', status: 400
     else
-        aUser = User.where("uid=" + uid).first
-        if aUser.nil?
-          render json: '{"success":"FAILURE", "message":"User ID not valid"}', status: 400
-        elsif sign_in(aUser)
-            render json: "{\"success\":\"OK\", \"message\":\"User logged in\", \"uid\": \"#{aUser.uid}\", \"loginURL\":\"http://localhost:3000/users/#{aUser.id}\"}", status: 200
-        else
-            render json: '{"success":"FAILURE", "message":"User not logged in"}', status: 400
-        end
+      aUser = User.where("uid=" + uid).first
+      if aUser.nil?
+        render json: '{"success":"FAILURE", "message":"User ID not valid"}', status: 400
+      elsif sign_in(aUser)
+          render json: "{\"success\":\"OK\", \"message\":\"User logged in\", \"uid\": \"#{aUser.uid}\", \"loginURL\":\"http://localhost:3000/users/#{aUser.id}\"}", status: 200
+      else
+          render json: '{"success":"FAILURE", "message":"User not logged in"}', status: 400
+      end
     end
   end
 end

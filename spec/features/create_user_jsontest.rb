@@ -24,7 +24,6 @@ describe "create user json" do
     expect(users.first.email).to eq "allan@smartass.com"
     expect(users.first.encrypted_password).to_not eq ""
     expect(users.first.uid).to eq 123
-
   end
 
   it "should CRASH & BURN no command" do
@@ -57,7 +56,6 @@ describe "create user json" do
     expect(response_from_hl_rails_server["message"]).to eq "Missing or Incorrect Command"
   end
 
-  # TODO: finish this test
   it "should CRASH & BURN no uid" do
     message_to_hl_rails_server = '{"command" : "createUser", "email" : "allan@smartass.com", "encrypted_password" : "password"}'
     # send message to hl server

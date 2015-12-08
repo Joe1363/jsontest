@@ -69,5 +69,4 @@ describe "Logging in" do
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
     expect(response_from_hl_rails_server["message"]).to eq "User ID not provided"
   end
-
 end

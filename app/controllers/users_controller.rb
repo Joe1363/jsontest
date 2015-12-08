@@ -8,9 +8,9 @@ class UsersController < ApplicationController
   end
 
   def profile
-    @user = current_user
-    render :profile
+    puts params
+    @user = User.find(params[:id])
+    puts @user.to_json
   end
-
 
 end

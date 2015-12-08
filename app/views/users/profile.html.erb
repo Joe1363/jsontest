@@ -1,7 +1,7 @@
-<% if @user = current_user %>
+<% if @user == current_user %>
   <h1> Welcome <%= @user.email %> </h1>
   <p> You are now logged in to Hours Logger </p>
 <% else %>
-  <h1><%= @user.email %>'s page<h1>
+  <h1><%= @user.email %>'s page</h1>
   <p>That's it really</p>
 <% end %>

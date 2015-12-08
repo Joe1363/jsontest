@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
   root 'users#index'
 
-  get '/users/:id/' => 'users#profile'
+devise_for :users
   get '/users' => 'users#index', as: 'users'
-  devise_for :users
+  get '/users/:id/' => 'users#profile'
+
 
   post '/api/service' => 'api#service'
 

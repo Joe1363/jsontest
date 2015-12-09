@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Change planID" do
+describe "Logging in" do
   # Common HTTP request headers, put in variable for ease of use - DRY!
   request_headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
 
@@ -9,12 +9,11 @@ describe "Change planID" do
     @aUser.email = "allen@smartass.com"
     @aUser.password = "password"
     @aUser.uid = 123
-    @aUser.planID = 345
     @aUser.save
   end
 
-  it "should be able to update planID" do
-    message_to_hl_rails_server = '{"command" : "updatePlan", "uid" : "123", "planID" : "456"}'
+  it "should be able to login a user with a valid uid" do
+    message_to_hl_rails_server = '{"command" : "loginUser", "uid" : "123"}'
     # send message to hl server
     page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
     # Check returned status code from the HL rails server
@@ -25,11 +24,13 @@ describe "Change planID" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "OK"
-    expect(response_from_hl_rails_server["message"]).to eq "planId changed"
+    expect(response_from_hl_rails_server["message"]).to eq "User logged in"
+    expect(response_from_hl_rails_server["loginURL"]).to eq "http://localhost:3000/users/#{@aUser.id}"
+    expect(response_from_hl_rails_server["uid"]).to eq "123"
   end
 
-  it "should not login a user with an invalid uid" do
-    message_to_hl_rails_server = '{"command" : "updatePlan", "uid" : "007", "planID" : "456"}'
+  it "should not login a user with a invalid uid" do
+    message_to_hl_rails_server = '{"command" : "loginUser", "uid" : "007"}'
     # send message to hl server
     page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
     # Check returned status code from the HL rails server
@@ -39,11 +40,11 @@ describe "Change planID" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "User ID not valid"
+    expect(response_from_hl_rails_server["message"]).to eq "UID not valid"
   end
 
   it "should not login a user without a valid uid" do
-    message_to_hl_rails_server = '{"command" : "updatePlan", "uid" : "", "planID" : "456"}'
+    message_to_hl_rails_server = '{"command" : "loginUser", "uid" : ""}'
     # send message to hl server
     page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
     # Check returned status code from the HL rails server
@@ -53,11 +54,11 @@ describe "Change planID" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "User ID not valid"
+    expect(response_from_hl_rails_server["message"]).to eq "UID not valid"
   end
 
   it "should not login a user without a uid" do
-    message_to_hl_rails_server = '{"command" : "updatePlan", "planID" : "456"}'
+    message_to_hl_rails_server = '{"command" : "loginUser"}'
     page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
     # Check returned status code from the HL rails server
     expect(page.status_code).to eq 400
@@ -66,22 +67,6 @@ describe "Change planID" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "User ID not provided"
+    expect(response_from_hl_rails_server["message"]).to eq "UID not provided"
   end
-
-  it "should not change a planID if planID is nil" do
-    message_to_hl_rails_server = '{"command" : "updatePlan", "uid" : "123"}'
-    # send message to hl server
-    page.driver.post("/api/service", message_to_hl_rails_server, request_headers)
-    # Check returned status code from the HL rails server
-    expect(page.status_code).to eq 400
-    # Check that we got json back
-    expect(page.response_headers["Content-Type"].include?('json')).to eq true
-    # parse the contents of the message we got from the server
-    response_from_hl_rails_server = JSON.parse(body)
-    # Check contents of message
-    expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "Plan ID not valid"
-  end
-
 end

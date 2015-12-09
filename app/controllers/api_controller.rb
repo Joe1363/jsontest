@@ -32,8 +32,24 @@ class ApiController < ApplicationController
     end
   end
 
-  def updatePlan
-    #TODO
+  def updatePlan json
+    uid = json["uid"]
+    planID = json["planID"]
+    if uid.nil?
+      render json: '{"success":"FAILURE", "message":"User ID not provided"}', status: 400
+    elsif uid == ""
+        render json: '{"success":"FAILURE", "message":"User ID not valid"}', status: 400
+    else
+      aUser = User.where("uid=" + uid).first
+      if aUser.nil?
+        render json: '{"success":"FAILURE", "message":"User ID not valid"}', status: 400
+      elsif planID.nil?
+        render json: '{"success":"FAILURE", "message":"Plan ID not valid"}', status: 400
+      else
+        aUser.planID = planID
+        render json: '{"success":"OK", "message":"planId changed"}', status: 200
+      end
+    end
   end
 
   def changeStatus

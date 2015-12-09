@@ -5,9 +5,9 @@ class ApiController < ApplicationController
     if json["command"] == "createUser"
       createUser(json)
     elsif json["command"] == "updatePlan"
-      # TODO
+      updatePlan(json)
     elsif json["command"] == "changeStatus"
-      # TODO
+      changeStatus(json)
     elsif json["command"] == "loginUser"
       loginUser(json)
     else

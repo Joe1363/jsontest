@@ -1,1 +1,1 @@
-A test app to explore creating and testing an API.
+A test app to explore creating and testing an API. Used to test API functionality that will be used by a third-party client.

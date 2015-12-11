@@ -100,12 +100,10 @@ class ApiController < ApplicationController
     end
   end
 
-  #
   def getUid json
     @uid = json["uid"]
   end
-  # Returns User object correcsponding to uid in the json passed in or
-  #
+
   def getUser
     @user = User.where("uid=" + @uid).first
   end

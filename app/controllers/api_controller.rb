@@ -33,44 +33,44 @@ class ApiController < ApplicationController
   end
 
   def updatePlan json
-    uid = json["uid"]
+    getUid(json)
     planID = json["planID"]
-    if uid.nil?
+    if @uid.nil?
       render json: '{"success":"FAILURE", "message":"UID not provided"}', status: 400
-    elsif uid == ""
-        render json: '{"success":"FAILURE", "message":"UID not valid"}', status: 400
+    elsif @uid.empty?
+      render json: '{"success":"FAILURE", "message":"UID empty"}', status: 400
     else
-      aUser = User.where("uid=" + uid).first
-      if aUser.nil?
-        render json: '{"success":"FAILURE", "message":"UID not valid"}', status: 400
+      getUser()
+      if @user.nil?
+        render json: '{"success":"FAILURE", "message":"UID invalid"}', status: 400
       elsif planID.nil?
-        render json: '{"success":"FAILURE", "message":"planID not valid"}', status: 400
+        render json: '{"success":"FAILURE", "message":"planID invalid"}', status: 400
       else
-        aUser.planID = planID
+        @user.planID = planID
         render json: '{"success":"OK", "message":"planID changed"}', status: 200
       end
     end
   end
 
   def changeStatus json
-    uid = json["uid"]
+    getUid(json)
     accountStatus = json["accountStatus"]
-    if uid.nil?
+    if @uid.nil?
       render json: '{"success":"FAILURE", "message":"UID not provided"}', status: 400
-    elsif uid == ""
-        render json: '{"success":"FAILURE", "message":"UID not valid"}', status: 400
+    elsif @uid.empty?
+      render json: '{"success":"FAILURE", "message":"UID empty"}', status: 400
     else
-      aUser = User.where("uid=" + uid).first
-      if aUser.nil?
-        render json: '{"success":"FAILURE", "message":"UID not valid"}', status: 400
+      getUser()
+      if @user.nil?
+        render json: '{"success":"FAILURE", "message":"UID invalid"}', status: 400
       elsif accountStatus.nil?
         render json: '{"success":"FAILURE", "message":"accountStatus not provided"}', status: 400
-      elsif aUser.accountStatus == "DELETED"
+      elsif @user.accountStatus == "DELETED"
         render json: '{"success":"FAILURE", "message":"accountStatus is not restorable"}', status: 400
       elsif accountStatus != "ACTIVE" && accountStatus != "DISABLED" && accountStatus != "DELETED"
         render json: '{"success":"FAILURE", "message":"accountStatus not valid"}', status: 400
       else
-        aUser.accountStatus = accountStatus
+        @user.accountStatus = accountStatus
         if accountStatus == "ACTIVE"
           render json: '{"success":"OK", "message":"accountStatus is ACTIVE"}', status: 200
         elsif accountStatus == "DISABLED"
@@ -83,20 +83,30 @@ class ApiController < ApplicationController
   end
 
   def loginUser json
-    uid = json["uid"]
-    if uid.nil?
+    getUid(json)
+    if @uid.nil?
       render json: '{"success":"FAILURE", "message":"UID not provided"}', status: 400
-    elsif uid == ""
-        render json: '{"success":"FAILURE", "message":"UID not valid"}', status: 400
+    elsif @uid.empty?
+      render json: '{"success":"FAILURE", "message":"UID empty"}', status: 400
     else
-      aUser = User.where("uid=" + uid).first
-      if aUser.nil?
-        render json: '{"success":"FAILURE", "message":"UID not valid"}', status: 400
-      elsif sign_in(aUser)
-          render json: "{\"success\":\"OK\", \"message\":\"User logged in\", \"uid\": \"#{aUser.uid}\", \"loginURL\":\"http://localhost:3000/users/#{aUser.id}\"}", status: 200
+      getUser()
+      if @user.nil?
+        render json: '{"success":"FAILURE", "message":"UID invalid"}', status: 400
+      elsif sign_in(@user)
+        render json: "{\"success\":\"OK\", \"message\":\"User logged in\", \"uid\": \"#{@uid}\", \"loginURL\":\"http://localhost:3000/users/#{@user.id}\"}", status: 200
       else
-          render json: '{"success":"FAILURE", "message":"User not logged in"}', status: 400
+        render json: '{"success":"FAILURE", "message":"User not logged in"}', status: 400
       end
     end
+  end
+
+  #
+  def getUid json
+    @uid = json["uid"]
+  end
+  # Returns User object correcsponding to uid in the json passed in or
+  #
+  def getUser
+    @user = User.where("uid=" + @uid).first
   end
 end

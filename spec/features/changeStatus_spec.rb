@@ -70,7 +70,7 @@ describe "Change accountStatus" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "UID not valid"
+    expect(response_from_hl_rails_server["message"]).to eq "UID invalid"
   end
 
   it "should not login a user without a valid uid" do
@@ -84,7 +84,7 @@ describe "Change accountStatus" do
     response_from_hl_rails_server = JSON.parse(body)
     # Check contents of message
     expect(response_from_hl_rails_server["success"]).to eq "FAILURE"
-    expect(response_from_hl_rails_server["message"]).to eq "UID not valid"
+    expect(response_from_hl_rails_server["message"]).to eq "UID empty"
   end
 
   it "should not login a user without a uid" do

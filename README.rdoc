@@ -1,1 +1,3 @@
-Test app created for API project using JSON RESTful.
+A framework and tests created for a test API project using JSON RESTful.
+
+The API takes a JSON request that should include one of four commands and execute them. The commands include creating a user, logging in a user, updating a plan, and changing the account status. The API controller them returns a success or failure, a message, and other fields based on the command.
